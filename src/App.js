@@ -22,9 +22,10 @@ class BooksApp extends Component {
     if (this.state.books) {
       BooksAPI.update(book,shelf).then(() => {
         book.shelf = shelf;
-        BooksAPI.getAll().then((books) => {
-          this.setState({ books: books })
-        })
+
+        var updatedBooks = this.state.books.filter(mybook => mybook.id !== book.id)
+        updatedBooks.push(book)
+        this.setState({ books: updatedBooks})
       })
     }
   }
@@ -34,14 +35,12 @@ class BooksApp extends Component {
   }
 
   search = (query) => {
-    if (!query) {
-      this.setState({books: []})
-    } else {
-      BooksAPI.search(query).then((books) => {
-        books.map(book => (this.state.books.filter((b) => b.id === book.id).map(b => book.shelf = b.shelf)))
-        this.setState({ booksResult: books })
-      })
-    }
+    BooksAPI.search(query).then((books) => {
+      books.map(book => (this.state.books.filter((b) => b.id === book.id).map(b => book.shelf = b.shelf)))
+      this.setState({ booksResult: books })
+    }).catch(err => {
+      this.setState({ booksResult: [] })
+    })
   }
 
   render() {
