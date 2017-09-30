@@ -30,7 +30,7 @@ class ListBooks extends Component {
                             </div>
                         </div>
                         <div className="book-title">{book.title}</div>
-                        <div className="book-authors">{book.authors}</div>
+                        <div className="book-authors">{(book.authors!==undefined && book.authors.length>0)?book.authors.join(', '):''}</div>
                     </div>
                 </li>
                 ))}
